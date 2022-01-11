@@ -1,4 +1,6 @@
-﻿--CHECKLISTA:
+
+   
+--CHECKLISTA:
 --DROP PROCEDURES / TRIGGERS
 -- DROP VIEWS CHECK!
 -- DROP TABLES CHECK!
@@ -18,9 +20,11 @@ DROP TABLE IF EXISTS Literature_Loan, Artifact_Loan, Copy_Of_Journal, Dig, Slide
 DROP TABLE IF EXISTS Person, Archeological_Journal; -- Level 0
 
 /*DROP VIEWS*/
-DROP VIEW IF EXISTS List_Of_Employees;
+DROP VIEW IF EXISTS List_Of_Loaners;
 DROP VIEW IF EXISTS Artifact_List;
 DROP VIEW IF EXISTS Slide_List;
+DROP VIEW IF EXISTS Literature_Loans;
+DROP VIEW IF EXISTS Artifact_Loans;
 
 
 /*CREATE TABLES*/
@@ -164,10 +168,9 @@ REFERENCES     Artifact_Loan(A_Loan_ID)
 /*LISTA ÖVER ANSTÄLLDA*/
 GO
 
-CREATE VIEW List_Of_Employees 
+CREATE VIEW List_Of_Loaners 
 AS SELECT Personal_ID, [Name]
-FROM Person
-WHERE [Role] = 'Employee';
+FROM Person;
 
 GO
 
@@ -179,6 +182,17 @@ AS SELECT Item_Nr, Dig_ID,  [Description], Date_Found, Location_Found, Shelf_Nr,
 FROM Artifact;
 GO
 
+ 
+ /* lista över literatur */
+ GO
+
+ CREATE VIEW Literature_Loans
+ AS SELECT  Personal_ID, Date_out, Date_in, Overdue
+ FROM Literature_Loan;
+
+ GO
+
+
 /* LISTA ÖVER SLIDES --- g�r n�gon join senare*/
 GO
 
@@ -187,23 +201,32 @@ AS SELECT Slide_Nr, [Description], [Subject], Shelf_Nr, S_Loan_ID
 FROM Slide;
 GO
 
+/*LISTA ÖVER ARTIFACT LOANS  */
+GO
+
+CREATE VIEW Artifact_Loans
+AS SELECT Personal_ID, Date_out, Date_in
+FROM Artifact_Loan;
+
+GO
+
 
 
 /*INSERT*/
 
 
 /*Person*/
-INSERT INTO Person (Personal_ID, [Name], Phone, [Role], Loans)
-     VALUES ('19991219-1047','Alice', '0738323401', 'Student', 2 ),
-    	    ('19980313-1047','Niki', '0738553401', 'Employee', 1 ),
-	  	    ('19770422-1047','Truls', '0737650981', 'Employee', null ),
-	  	    ('19881012-1047','M�ns', '0738511101', 'Employee', 3 ),
-	        ('19951024-1047','Carl', '0738511101', 'Employee', 3 ),
-	   	    ('19901010-1047','My', '0738511101', 'Employee', 3 ),
-	   	    ('19921004-1047','Lana', '0738511101', 'Employee', null ),
-	   	    ('19941007-1047','Loke', '0738511101', 'Employee', null ),
-	   	    ('19941018-1047','Frej', '0738511101', 'Employee', 1 ),
-	   	    ('19911011-1047','Cleo', '0732020401', 'Student', 2 );
+INSERT INTO Person (Personal_ID, [Name], Phone, [Role])
+     VALUES ('19991219-1047','Alice', '0738323401', 'Student'),
+    	    ('19980313-1047','Niki', '0738553401', 'Employee' ),
+	  	    ('19770422-1047','Truls', '0737650981', 'Employee'),
+	  	    ('19881012-1047','M�ns', '0738511101', 'Employee'),
+	        ('19951024-1047','Carl', '0738511101', 'Employee'),
+	   	    ('19901010-1047','My', '0738511101', 'Employee'),
+	   	    ('19921004-1047','Lana', '0738511101', 'Employee'),
+	   	    ('19941007-1047','Loke', '0738511101', 'Employee'),
+	   	    ('19941018-1047','Frej', '0738511101', 'Employee'),
+	   	    ('19911011-1047','Cleo', '0732020401', 'Student');
 
 /*Archeological_Journal*/
 INSERT INTO Archeological_Journal (Title, Shelf_nr, Publication_date)
@@ -232,11 +255,11 @@ INSERT INTO Dig( Personal_ID, Dig_id, Dig_location, [Date])
 
 /*Literature_Loan*/ 
 INSERT INTO Literature_Loan ( Personal_ID, Date_out, Date_in, Overdue)
-      VALUES ('19991219-1047', '2021-12-07', '2022-01-01', '2022-01-05'), --Alice
-             ('19980313-1047', '2021-12-07', '2022-01-01', '2022-01-05'), --Niki
-	         ('19901010-1047', '2021-12-07', '2022-01-01', '2022-01-05'), --My
+      VALUES ( '19991219-1047', '2021-07-07', '2022-01-01', '2022-01-05'), --Alice
+             ('19980313-1047', '2021-09-07', '2022-01-01', '2022-01-05'), --Niki
+	         ('19901010-1047', '2021-10-07', '2022-01-01', '2022-01-05'), --My
 	         ('19941018-1047', '2021-12-07', '2022-01-01', '2022-01-05'), --Frej
-	         ('19911011-1047', '2021-12-07', '2022-01-01', '2022-01-05'); --Cleo
+	         ('19911011-1047', '2022-01-01', '2022-01-01', '2022-01-05'); --Cleo
 
 /*Slide_Loan*/
 INSERT INTO Slide_Loan (Personal_ID, Date_out, Date_in, Slide_Nr, Overdue)
@@ -250,7 +273,7 @@ INSERT INTO Slide_Loan (Personal_ID, Date_out, Date_in, Slide_Nr, Overdue)
 INSERT INTO Artifact_Loan ( Personal_ID, Date_out, Date_in, Display_Location)
       VALUES ( '19881012-1047', '2021-05-06', '2021-06-05', 'Museum'),--M�ns
              ( '19881012-1047', '2021-05-06', '2021-06-05', 'Museum'),--M�ns
-	         ( '19881012-1047', '2021-05-06', '2021-06-05', 'Museum'),--M�ns
+	         ( '19991219-1047', '2021-05-06', '2021-06-05', 'Museum'),--Alice
 	         ( '19951024-1047', '2021-05-06', '2021-06-05', 'Museum'),--Carl
 	         ( '19951024-1047', '2021-05-06', '2021-06-05', 'Museum');--Carl
 
@@ -316,7 +339,7 @@ INSERT INTO Artifact (Item_Nr, Dig_ID,  [Description], Date_Found, Location_Foun
        	     (30, 32,  'bla bla', '2021-05-07', 'KALMAR', '30', '56', 78, null),
 		     (31, 32,  'test grej', '2021-05-07', 'KALMAR', '30', '56', 78, null);
 
-
+			
 ------------------------------------------DELETE (till senare)-----------------------------------------------------------------------------
 
 
@@ -339,6 +362,7 @@ INSERT INTO Artifact (Item_Nr, Dig_ID,  [Description], Date_Found, Location_Foun
 
 /*CREATE PROCEDURES / TRIGGERS*/
 
+/*
 GO
 
 
@@ -351,8 +375,8 @@ CREATE PROCEDURE Add_Copy_Of_Journal
 		VALUES(@Copy_nr)
 	GO;
 
+	 END;
+*/
 
 
 
-
- END;
