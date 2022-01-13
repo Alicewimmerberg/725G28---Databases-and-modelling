@@ -1,5 +1,3 @@
-
-   
 --CHECKLISTA:
 --DROP PROCEDURES / TRIGGERS
 -- DROP VIEWS CHECK!
@@ -220,7 +218,7 @@ INSERT INTO Person (Personal_ID, [Name], Phone, [Role])
      VALUES ('19991219-1047','Alice', '0738323401', 'Student'),
     	    ('19980313-1047','Niki', '0738553401', 'Employee' ),
 	  	    ('19770422-1047','Truls', '0737650981', 'Employee'),
-	  	    ('19881012-1047','M�ns', '0738511101', 'Employee'),
+	  	    ('19881012-1047','Linus', '0738511101', 'Employee'),
 	        ('19951024-1047','Carl', '0738511101', 'Employee'),
 	   	    ('19901010-1047','My', '0738511101', 'Employee'),
 	   	    ('19921004-1047','Lana', '0738511101', 'Employee'),
@@ -255,9 +253,9 @@ INSERT INTO Dig( Personal_ID, Dig_id, Dig_location, [Date])
 
 /*Literature_Loan*/ 
 INSERT INTO Literature_Loan ( Personal_ID, Date_out, Date_in, Overdue)
-      VALUES ( '19991219-1047', '2021-07-07', '2022-01-01', '2022-01-05'), --Alice
-             ('19980313-1047', '2021-09-07', '2022-01-01', '2022-01-05'), --Niki
-	         ('19901010-1047', '2021-10-07', '2022-01-01', '2022-01-05'), --My
+      VALUES ( '19991219-1047', '2019-07-07', '2022-01-06', '2022-01-05'), --Alice
+             ('19980313-1047', '2020-09-07', '2022-01-06', '2022-01-05'), --Niki
+	         ('19951024-1047', '2021-10-07', '2022-01-01', '2022-01-05'), --My
 	         ('19941018-1047', '2021-12-07', '2022-01-01', '2022-01-05'), --Frej
 	         ('19911011-1047', '2022-01-01', '2022-01-01', '2022-01-05'); --Cleo
 
@@ -364,8 +362,6 @@ INSERT INTO Artifact (Item_Nr, Dig_ID,  [Description], Date_Found, Location_Foun
 
 /*
 GO
-
-
 CREATE PROCEDURE Add_Copy_Of_Journal
       /* @Title       Parametrar @ sedan vilken data typ tex int*/
 	   @Copy_nr INT
@@ -377,6 +373,3 @@ CREATE PROCEDURE Add_Copy_Of_Journal
 
 	 END;
 */
-
-
-
